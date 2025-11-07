@@ -158,17 +158,17 @@ def show_data_upload():
                 'Non-Null Count': df.count(),
                 'Null Count': df.isnull().sum()
             })
-            st.dataframe(col_info, use_container_width=True)
+            st.dataframe(col_info, width='stretch')
             
             # Preview the data
             st.subheader("🔍 Data Preview")
-            st.dataframe(df.head(10), use_container_width=True)
+            st.dataframe(df.head(10), width='stretch')
             
             # Basic statistics for numeric columns
             numeric_cols = df.select_dtypes(include=[np.number]).columns
             if len(numeric_cols) > 0:
                 st.subheader("📈 Statistical Summary")
-                st.dataframe(df[numeric_cols].describe(), use_container_width=True)
+                st.dataframe(df[numeric_cols].describe(), width='stretch')
                 
         except Exception as e:
             st.error(f"❌ Error reading file: {str(e)}")
@@ -190,7 +190,7 @@ def show_data_upload():
             'Current_Inventory': [150, 200, 80, 250, 120]
         })
         
-        st.dataframe(sample_data, use_container_width=True)
+        st.dataframe(sample_data, width='stretch')
         
         # Generate sample data button
         if st.button("🎲 Generate Sample Data for Testing"):
@@ -253,7 +253,7 @@ def show_sku_analysis():
         sku_summary.columns = ['Total Sales', 'Avg Sales', 'Total Units', 'Avg Units', 'Avg Cost', 'Avg Inventory']
         sku_summary['Profit Margin'] = ((sku_summary['Total Sales'] - (sku_summary['Total Units'] * sku_summary['Avg Cost'])) / sku_summary['Total Sales'] * 100).round(2)
         
-        st.dataframe(sku_summary, use_container_width=True)
+        st.dataframe(sku_summary, width='stretch')
         
         # Top performing SKUs
         st.subheader("🏆 Top Performing SKUs")
@@ -267,7 +267,7 @@ def show_sku_analysis():
                 title="Top 5 SKUs by Sales",
                 labels={'x': 'SKU', 'y': 'Total Sales ($)'}
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         
         with col2:
             top_units = sku_summary.nlargest(5, 'Total Units')[['Total Units', 'Total Sales']]
@@ -277,7 +277,7 @@ def show_sku_analysis():
                 title="Top 5 SKUs by Units Sold",
                 labels={'x': 'SKU', 'y': 'Total Units'}
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         
         # SKU profitability analysis
         st.subheader("💰 Profitability Analysis")
@@ -293,7 +293,7 @@ def show_sku_analysis():
             xaxis_title="Total Units Sold",
             yaxis_title="Profit Margin (%)"
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
         
     # Individual SKU deep dive
     if len(selected_skus) == 1:
@@ -319,7 +319,7 @@ def show_sku_analysis():
             daily_sales = sku_data.groupby('Date')['Sales'].sum().reset_index()
             
             fig = px.line(daily_sales, x='Date', y='Sales', title=f"Sales Trend for {selected_skus[0]}")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
 def show_regional_analysis():
     st.header("🌍 Regional Analysis")
@@ -347,7 +347,7 @@ def show_regional_analysis():
         regional_summary.columns = ['Total Sales', 'Total Units', 'Unique SKUs']
         regional_summary['Avg Price'] = (regional_summary['Total Sales'] / regional_summary['Total Units']).round(2)
         
-        st.dataframe(regional_summary, use_container_width=True)
+        st.dataframe(regional_summary, width='stretch')
         
         # Regional visualizations
         col1, col2 = st.columns(2)
@@ -359,7 +359,7 @@ def show_regional_analysis():
                 names=regional_summary.index,
                 title="Sales Distribution by Region"
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         
         with col2:
             # Units by region bar chart
@@ -369,7 +369,7 @@ def show_regional_analysis():
                 title="Units Sold by Region",
                 labels={'x': 'Region', 'y': 'Total Units'}
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         
         # SKU performance by region
         st.subheader("🏷️ SKU Performance by Region")
@@ -391,7 +391,7 @@ def show_regional_analysis():
             title="SKU Sales Heatmap by Region",
             labels=dict(x="Region", y="SKU", color="Sales")
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
         
         # Top performing SKUs by region
         st.subheader("🎯 Top SKUs by Region")
@@ -407,7 +407,7 @@ def show_regional_analysis():
             title=f"Top 10 SKUs in {selected_region}",
             labels={'x': 'Total Sales ($)', 'y': 'SKU'}
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
         
         # Regional trends over time
         if 'Date' in df.columns:
@@ -425,7 +425,7 @@ def show_regional_analysis():
                 title="Monthly Sales Trends by Region"
             )
             fig.update_xaxes(tickangle=45)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
 
 def show_manufacturing_recommendations():
@@ -502,7 +502,7 @@ def show_manufacturing_recommendations():
         
         st.dataframe(
             display_df.style.applymap(color_stock_status, subset=['Stock Status']),
-            use_container_width=True
+            width='stretch'
         )
         
         # Priority SKUs that need attention
@@ -515,7 +515,7 @@ def show_manufacturing_recommendations():
             priority_df = low_stock_skus[['Current_Stock', 'Safety_Stock', 'Min_Manufacturing_Qty']].copy()
             priority_df['Immediate_Need'] = priority_df['Min_Manufacturing_Qty'] - priority_df['Current_Stock']
             
-            st.dataframe(priority_df, use_container_width=True)
+            st.dataframe(priority_df, width='stretch')
         else:
             st.success("✅ All SKUs have adequate stock levels!")
         
@@ -540,7 +540,7 @@ def show_manufacturing_recommendations():
             color=top_priority['Priority_Score'],
             color_continuous_scale='Reds'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
         
         # Export recommendations
         if st.button("📥 Download Manufacturing Recommendations"):

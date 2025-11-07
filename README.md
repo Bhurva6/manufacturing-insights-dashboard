@@ -56,7 +56,9 @@ Your Excel file should contain the following columns:
 
 ## 🔗 Live Demo
 
-Access the live application at: [Your Streamlit Cloud URL]
+Access the live application at: [Manufacturing Insights Dashboard](https://manufacturing-insights-dashboard.streamlit.app/)
+
+*Note: The app URL will be available after deployment. It typically follows the format: `https://[app-name]-[random-string].streamlit.app`*
 
 ## 📈 Usage
 
